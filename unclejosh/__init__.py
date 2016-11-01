@@ -3,7 +3,7 @@
 UncleJosh
 
 Tools that I use over and over again that don't deserve to exist in their
-own library.
+own packages.
 
 Created on Thu Oct  6 12:57:38 2016
 

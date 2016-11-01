@@ -4,8 +4,8 @@ indent.py
 
 Simple indentation guide for printed tree-like output.
 
-Repeats a string for a certain number of characters. Default string is 
-" :  ". 
+Repeats a string for a certain number of characters. Default string is
+" :  ".
 
 >>> from indent import indent
 >>> for x in range(7): print(indent(x),"line")
@@ -16,16 +16,15 @@ Repeats a string for a certain number of characters. Default string is
  :   line
  :    line
  :   : line
->>> 
+>>>
 
-@author: Josh English
 """
+__author__ == "Joshua R English"
+__version__ == "1.0"
 
 from itertools import islice, cycle
 
 _dot = ":"
-
-
 _pad = 1
 _width = 4
 
@@ -78,9 +77,9 @@ def set_dots(dots):
 
 def indent(x):
     """indent(x)
-    Return a string of length x with dot characters spaced every w-spaces
+    Return a string of length x with dot characters spaced into columns
     """
     return ''.join(islice(cycle(_dots), x))
-    
+
 if __name__ == '__main__':
     for x in range(7): print(indent(x),"line")

@@ -7,7 +7,7 @@ Created on Thu Oct  6 11:58:26 2016
 
 def spread(n):
     """return a list of n-length of floats evenly distributed between
-    0 and 1.
+    0 and 1 inclusive.
     """
 
     if n < 1:
