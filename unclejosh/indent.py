@@ -19,8 +19,8 @@ Repeats a string for a certain number of characters. Default string is
 >>>
 
 """
-__author__ == "Joshua R English"
-__version__ == "1.0"
+__author__ = "Joshua R English"
+__version__ = "1.0"
 
 from itertools import islice, cycle
 
