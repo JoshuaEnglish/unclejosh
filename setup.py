@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name = 'unclejosh',
-    version = '0.0.3',
+    version = '0.3.1',
     description = 'A personal toolbox',
     long_description = """A group of standalone tools that I find useful
     to keep in one place.""",
