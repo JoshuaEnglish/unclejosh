@@ -1,4 +1,5 @@
 2016-10-06 -- 0.0.1 spread and xlreader
 2016-10-23 -- 0.0.2 indent
 2016-10-31 -- 0.0.3 zipcodetool
-2017-05-05 -- 0.0.4 xlreader updated to use pubsub (or a dummy)
+2016-11-13 -- 0.3.1 fixed typo in indent. Changed version plane
+2017-05-05 -- 0.3.2 xlreader updated to use pubsub (or a dummy)
