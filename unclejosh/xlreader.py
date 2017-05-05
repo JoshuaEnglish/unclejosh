@@ -5,10 +5,10 @@ namedtuple objects.
 """
 
 __author__ = __maintainer__ = "Josh English"
-__date__ = "2015-03-18"
+__date__ = "2017-05-05"
 __email__ = "josh@joshuarenglish.com"
 __status__ = "Release"
-__version__ = "1.0"
+__version__ = "1.1"
 
 
 
@@ -21,6 +21,15 @@ XLOGGER = logging.getLogger('XLREADER')
 from xlutils.view import SheetView
 
 import json
+
+try:
+    from pubsub import pub
+except ImportError:
+    class dummypub:
+        def sendMessage(self, *args, **kwargs):
+            pass
+    pub = dummypub()
+
 
 class XLReader(object):
     """Reader(column_map)
@@ -79,12 +88,14 @@ class XLReader(object):
 
         Calling this function replaces the list of namedtuple objects.
         """
+        pub.sendMessage('%s.start' % self.classname)
         self._find_sheet(book)
         if self.sheet is None:
             XLOGGER.error("Cannot find sheet with appropriate data")
             raise ValueError("Cannot find sheet with appropriate data")
 
         self._load_objects()
+        pub.sendMessage('%s.done' % self.classname)
 
     def _find_sheet(self, book):
         """Finds the appropriate sheet and row of the headers"""
@@ -113,8 +124,9 @@ class XLReader(object):
         XLOGGER.debug("Loading objects")
         self.objects = []
         view = SheetView(self.book, self.sheet, slice(self.row+1, None, None))
-
-        for row in view:
+        pub.sendMessage('%s.range', value = view.rows.stop)
+        for idx, row in enumerate(view):
+            pub.sendMessage('%s.update', value=idx)
             items = self.getter(list(row))
             new_tuple = self.tuple_class._make(items)
             is_good = True
