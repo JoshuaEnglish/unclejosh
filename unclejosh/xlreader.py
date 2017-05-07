@@ -10,13 +10,10 @@ __email__ = "josh@joshuarenglish.com"
 __status__ = "Release"
 __version__ = "1.1"
 
-
-
 from collections import namedtuple, Mapping
 from operator import itemgetter
 
 import logging
-XLOGGER = logging.getLogger('XLREADER')
 
 from xlutils.view import SheetView
 
@@ -30,13 +27,15 @@ except ImportError:
             pass
     pub = dummypub()
 
+XLOGGER = logging.getLogger('XLREADER')
+
 
 class XLReader(object):
     """Reader(column_map)
     Creates an object to read an xlrd.Book object and create a list of
     namedtuple objects representing the data in one sheet of the book.
     Column_map is a dictionary of "header item", "fieldname" pairs.
-    Column_map can also be a list or tuple of ("header item", "fieldname") pairs
+    Column_map can also be an iterable of ("header item", "fieldname") pairs
     If column_map has a key of "_name", the value will be the name of the
     namedtuple class.
     Use Reader.scan_book_for_data(book) to load items.
@@ -58,7 +57,7 @@ class XLReader(object):
         if isinstance(column_map, Mapping):
             map_items = column_map.items()
         else:
-            map_items = column_map # assume it's an iterable of tuples
+            map_items = column_map  # assume it's an iterable of tuples
 
         for key, val in map_items:
             if key == '_name':
@@ -124,7 +123,7 @@ class XLReader(object):
         XLOGGER.debug("Loading objects")
         self.objects = []
         view = SheetView(self.book, self.sheet, slice(self.row+1, None, None))
-        pub.sendMessage('%s.range', value = view.rows.stop)
+        pub.sendMessage('%s.range', value=view.rows.stop)
         for idx, row in enumerate(view):
             pub.sendMessage('%s.update', value=idx)
             items = self.getter(list(row))
@@ -138,6 +137,7 @@ class XLReader(object):
                 self.objects.append(new_tuple)
         XLOGGER.info("%d objects loaded", len(self.objects))
 
+
 def xlreader_to_json(reader):
     """Retun a json-encoded representation of the reader.
     Does not record read objects
@@ -149,6 +149,7 @@ def xlreader_to_json(reader):
     res['filters'] = reader.filter_fields
     return json.dumps(res)
 
+
 def xlreader_from_json(json_string, klass=XLReader):
     """Create a reader from a previously stored json string"""
     res = json.loads(json_string)
@@ -157,5 +158,3 @@ def xlreader_from_json(json_string, klass=XLReader):
     reader.set_filter_fields(res['filters'])
     reader.classname = res['_name']
     return reader
-
-

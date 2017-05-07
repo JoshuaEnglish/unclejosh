@@ -5,6 +5,7 @@ Created on Thu Oct  6 11:58:26 2016
 @author: jenglish
 """
 
+
 def spread(n):
     """return a list of n-length of floats evenly distributed between
     0 and 1 inclusive.
@@ -21,6 +22,7 @@ def spread(n):
 
     return res
 
+
 if __name__ == '__main__':
-    for x in range(1,7):
+    for x in range(1, 7):
         print(x, spread(x))

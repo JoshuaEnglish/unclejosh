@@ -79,6 +79,7 @@ def build_dot_string():
         raise ValueError("Pad and Dot are bigger than the total width")
     DOTS = "{0}{1}{2}".format(" "*PAD, DOT, " "*(WIDTH-PAD-1))
 
+
 build_dot_string()
 
 
