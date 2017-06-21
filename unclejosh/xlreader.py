@@ -4,11 +4,6 @@ Utility for reading Excel spreadsheets and generating lists of
 namedtuple objects.
 """
 
-__author__ = __maintainer__ = "Josh English"
-__date__ = "2017-05-05"
-__email__ = "josh@joshuarenglish.com"
-__status__ = "Release"
-__version__ = "1.1"
 
 from collections import namedtuple, Mapping
 from operator import itemgetter
@@ -26,6 +21,12 @@ except ImportError:
         def sendMessage(self, *args, **kwargs):
             pass
     pub = dummypub()
+
+__author__ = __maintainer__ = "Josh English"
+__date__ = "2017-06-21"
+__email__ = "josh@joshuarenglish.com"
+__status__ = "Release"
+__version__ = "1.1.1"
 
 XLOGGER = logging.getLogger('XLREADER')
 
@@ -53,6 +54,7 @@ class XLReader(object):
         self.getter = None
 
         self.classname = 'Datum'
+        self.update_interval = 1
 
         if isinstance(column_map, Mapping):
             map_items = column_map.items()
@@ -123,9 +125,11 @@ class XLReader(object):
         XLOGGER.debug("Loading objects")
         self.objects = []
         view = SheetView(self.book, self.sheet, slice(self.row+1, None, None))
-        pub.sendMessage('%s.range', value=view.rows.stop)
+
+        pub.sendMessage('%s.range' % self.classname, value=view.rows.stop)
         for idx, row in enumerate(view):
-            pub.sendMessage('%s.update', value=idx)
+            if idx % self.update_interval == 0:
+                pub.sendMessage('%s.update' % self.classname, value=idx,)
             items = self.getter(list(row))
             new_tuple = self.tuple_class._make(items)
             is_good = True
