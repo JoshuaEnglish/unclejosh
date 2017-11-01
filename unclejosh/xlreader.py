@@ -11,6 +11,7 @@ from operator import itemgetter
 import logging
 
 from xlutils.view import SheetView
+import xlrd
 
 import json
 
@@ -128,7 +129,7 @@ class XLReader(object):
 
         pub.sendMessage('%s.range' % self.classname, value=view.rows.stop)
         for idx, row in enumerate(view):
-            if idx % self.update_interval == 0:
+            if not idx % self.update_interval:
                 pub.sendMessage('%s.update' % self.classname, value=idx,)
             items = self.getter(list(row))
             new_tuple = self.tuple_class._make(items)
@@ -162,3 +163,11 @@ def xlreader_from_json(json_string, klass=XLReader):
     reader.set_filter_fields(res['filters'])
     reader.classname = res['_name']
     return reader
+
+
+def get_data_from_book(datamap, filepath):
+    reader = XLReader(datamap)
+    book = xlrd.open_workbook(filepath)
+    reader.scan_book_for_data(book)
+    book.release_resources()
+    return reader.objects

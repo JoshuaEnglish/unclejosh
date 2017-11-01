@@ -4,3 +4,4 @@
 2016-11-13 -- 0.3.1 fixed typo in indent. Changed version plane
 2017-05-05 -- 0.3.2 xlreader updated to use pubsub (or a dummy)
 2017-06-21 -- 0.3.3 xlreader updated with update_interval
+2017-11-01 -- 0.3.4 added xlreader.get_data_from_book
