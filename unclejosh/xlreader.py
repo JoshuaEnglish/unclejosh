@@ -24,10 +24,10 @@ except ImportError:
     pub = dummypub()
 
 __author__ = __maintainer__ = "Josh English"
-__date__ = "2017-06-21"
+__date__ = "2017-11-14"
 __email__ = "josh@joshuarenglish.com"
 __status__ = "Release"
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
 XLOGGER = logging.getLogger('XLREADER')
 
@@ -165,8 +165,10 @@ def xlreader_from_json(json_string, klass=XLReader):
     return reader
 
 
-def get_data_from_book(datamap, filepath):
+def get_data_from_book(datamap, filepath, filters=None):
     reader = XLReader(datamap)
+    if filters:
+        reader.set_filter_fields(filters)
     book = xlrd.open_workbook(filepath)
     reader.scan_book_for_data(book)
     book.release_resources()
