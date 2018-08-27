@@ -17,4 +17,5 @@ setup(
     author_email="josh@joshuarenglish.com",
 
     packages=['unclejosh'],
+    install_requires=['xlutils', 'xlrd']`
 )
