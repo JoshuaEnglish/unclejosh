@@ -99,6 +99,31 @@ class XLReader(object):
         self._load_objects()
         pub.sendMessage('%s.done' % self.classname)
 
+    def check_workbook_for_sheet(self, book):
+        """Searches as _find_sheet but raises a more specific error on missing
+        columns."""
+        self.book = book
+        best_chances = {}
+        for sheet in book.sheets():
+            for ridx in range(15):
+                row_values = sheet.row_values(ridx)
+                cols_found = [col for col in self.cols if col in row_values]
+                cols_missing = [col for col in self.cols
+                                if col not in row_values]
+
+                if cols_found:
+                    print(sheet.name, ridx,
+                          [col for col in self.cols if col not in row_values])
+                if len(cols_found) == len(self.cols) and cols_missing == []:
+                    self.sheet = sheet
+                    self.row = ridx
+                    self._make_getter()
+                    break
+                if cols_found:
+                    best_chances[(sheet.name, ridx)] = (cols_found,
+                                                        cols_missing)
+        print("Best chances:", best_chances)
+
     def _find_sheet(self, book):
         """Finds the appropriate sheet and row of the headers"""
         self.book = book
